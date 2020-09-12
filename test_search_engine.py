@@ -3,7 +3,7 @@ import pdb
 import argparse
 from nltk.tokenize import RegexpTokenizer
 import re
-from test_bert import get_scores, sanitizer2
+from utils import get_scores, sanitizer2
 
 # api_url = 'https://www.googleapis.com/customsearch/v1?&cx=0156ca17ee72cb816&q=is%20covid%20a%20virus'
 api_url = 'https://www.googleapis.com/customsearch/v1'
@@ -87,7 +87,7 @@ data = [
     ("Mosquito bites spread the coronavirus", False),
     ("The coronavirus spreads in hot or cold climates", True),
     ("I can recover from the coronavirus", True),
-    ("Children do not spread the corona virus", False)
+    ("Children do not spread the corona virus", False),
     ("Drinking cow urine prevents corona virus", False)
 ]
 
