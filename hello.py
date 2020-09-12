@@ -1,5 +1,10 @@
 from flask import Flask, request, render_template
 import pdb
+import torch
+import sys
+
+# sys.path.insert(0, './cis/home/ambar/my_documents/docker-data/com/hophacks20')
+from test_search_engine import check_true
 
 app = Flask(__name__)
 
@@ -21,11 +26,9 @@ def post(query):
 def post2():
     print('here')
     text = request.form['query']
-    print ('dsfsdfsdf')
-    print (text)
-    print ('dsfsdfsdf')
-    processed_text = text.upper()
-    return render_template('result.html', result=processed_text)
+    response = check_true(text)
+    response = text.upper()
+    return render_template('result.html', result=response)
 
 
 @app.route('/', methods=['GET'])
