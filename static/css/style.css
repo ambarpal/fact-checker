@@ -822,11 +822,6 @@ button {
   -ms-flex-pack: center;
       justify-content: center;
   font-family: 'Poppins', sans-serif;
-  /*background: url("../images/Searchs_130.png");*/
-  /*background: url("{{ url_for('static', filename= 'images/Searchs_130.png') }}")*/
-  background-position: bottom right;
-  background-repeat: no-repeat;
-  background-size: 100%;
   padding: 15px;
 }
 
