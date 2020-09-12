@@ -26,15 +26,6 @@ def check_true(question, verbose=True):
         snippets = []
         for item in resp_json['items']:
             sentence = sanitizer2(item['snippet'])
-            # snippet = item['snippet'].replace('...', '.').replace('-19','').replace(' 19', '')
-            # tokenizer = RegexpTokenizer('\w+|\$[\d\.]+||\-+')
-            # tokens = tokenizer.tokenize(snippet)
-            # sentence = " ".join([token.lower().strip() for token in tokens])
-            # # if the 2 and 3rd tokens are numbers, replace the first 3 tokens
-            # sentence = re.sub(r'[ ]+',' ', sentence)
-            # sentence = re.sub(r'^[a-z]+[ ]+[0-9]{1,2}[ ]+[0-9]{4}[ ]+', '',sentence)
-            # sentence = sentence.replace('covid', 'corona virus').replace('coronavirus', 'corona virus').replace('sars-cov-2', 'corona virus').\
-            #             replace('  ', ' ')
             snippets.append(sentence)
             #print ('\'' + item['snippet'].rstrip('...').lstrip('...') + '\'')
             # print (item['formattedUrl'])
@@ -97,6 +88,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     res = check_true(sanitizer2(args.q), verbose=True)
     print ('RESULT:', res)
+    
     '''
     print ('Calculating Accuracy on Entire Data...')
     acc = 0.0

@@ -63,16 +63,6 @@ def get_verdicts(question, verbose=True):
         resp_json = response.json()
         fact, verdict = [], []
         for claim in resp_json['claims']:
-            # sentence = claim['text'].strip().replace('-19', '')
-            # #remove punctuations
-            # tokenizer = RegexpTokenizer('\w+|\$[\d\.]+||\-+')
-            # tokens = tokenizer.tokenize(sentence)
-            # sentence = " ".join([token.lower().strip() for token in tokens])
-            # sentence = re.sub(r'[ ]+',' ', sentence)
-            # sentence = sentence.replace('covid', 'corona virus').\
-            #                     replace('coronavirus', 'corona virus').\
-            #                     replace('sars-cov-2', 'corona virus').\
-            #                     replace('  ', ' ')
             sentence = sanitizer1(claim['text'])
             fact.append(sentence)
             #print(sentence)

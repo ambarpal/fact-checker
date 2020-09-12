@@ -203,7 +203,7 @@ def get_scores(corpus, question, verbose=True):
     corpus_embeddings = embedder.encode(corpus, convert_to_tensor=True)
 
     # Find the closest 5 sentences of the corpus for each question sentence based on cosine similarity
-    top_k = 5
+    top_k = 100
 
     question_embedding = embedder.encode(question, convert_to_tensor=True)
     cos_scores = util.pytorch_cos_sim(question_embedding, corpus_embeddings)[0]
