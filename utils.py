@@ -8,6 +8,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.tokenize import RegexpTokenizer
 import re
+import torch
 
 embedder = SentenceTransformer('distilbert-base-nli-stsb-mean-tokens')
 
@@ -174,10 +175,15 @@ def nltk_similarity(sa, sb):
 
 def intersecting_who(question, verbose=True):
     who_embeddings = embedder.encode(who_truths, convert_to_tensor=True)
+    who_negs = [no_negation(truth) for truth in who_truths]
+    who_negs = torch.from_numpy(np.asarray(who_negs))
+    
     question_embedding = embedder.encode(question, convert_to_tensor=True)
+    question_neg = no_negation(question)
     cos_scores = util.pytorch_cos_sim(question_embedding, who_embeddings)[0]
-    cos_scores = cos_scores.cpu()
-    cos_scores_nltk = [nltk_similarity(question, who_truths[ind]) for ind in range(len(who_truths))]
+    cos_scores = cos_scores.cpu()*question_neg*who_negs
+    cos_scores_nltk = [nltk_similarity(question, who_truths[ind])*question_neg*who_negs[ind]\
+                for ind in range(len(who_truths))]
 
     if verbose:
         for ind in range(cos_scores.numpy().squeeze().shape[0]):
@@ -204,13 +210,17 @@ def get_scores(corpus, question, verbose=True):
         return [[who_fact, 1.0]]
 
     corpus_embeddings = embedder.encode(corpus, convert_to_tensor=True)
+    corpus_negs = [no_negation(s) for s in corpus]
+    corpus_negs = torch.from_numpy(np.asarray(corpus_negs))
+    
 
     # Find the closest 5 sentences of the corpus for each question sentence based on cosine similarity
     top_k = 5
 
     question_embedding = embedder.encode(question, convert_to_tensor=True)
+    question_neg = no_negation(question)
     cos_scores = util.pytorch_cos_sim(question_embedding, corpus_embeddings)[0]
-    cos_scores = cos_scores.cpu()
+    cos_scores = cos_scores.cpu()*question_neg*corpus_negs
 
     # temp = util.pytorch_cos_sim(embedder.encode('fact: drinking sanitiers does not prevent or cure corona virus'), embedder.encode('drinking sanitizers prevents corona virus'))
     # pdb.set_trace()
@@ -233,12 +243,23 @@ def get_scores(corpus, question, verbose=True):
 
 def get_true_false(corpus, verbose=True):
     corpus_embeddings = embedder.encode(corpus, convert_to_tensor=True)
+    corpus_negs = [no_negation(s) for s in corpus]
+    corpus_negs = torch.from_numpy(np.asarray(corpus_negs))
+
+    
     query_embedding = embedder.encode('true', convert_to_tensor=True)
+    query_neg = 1
+
     true_cos_scores = util.pytorch_cos_sim(query_embedding, corpus_embeddings)[0]
-    true_cos_scores = true_cos_scores.cpu()
+    true_cos_scores = true_cos_scores.cpu()*corpus_negs
+    
+    
     query_embedding = embedder.encode('false', convert_to_tensor=True)
+    query_neg = 1
+
+
     false_cos_scores = util.pytorch_cos_sim(query_embedding, corpus_embeddings)[0]
-    false_cos_scores = false_cos_scores.cpu()
+    false_cos_scores = false_cos_scores.cpu()*corpus_negs
     res = []
     for i in range(len(corpus)):
         if true_cos_scores[i] > false_cos_scores[i]:

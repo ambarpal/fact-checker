@@ -95,14 +95,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("q", help="enter query", type=str)
     args = parser.parse_args()
-    res = check_true(sanitizer2(args.q), verbose=False)
+    res = check_true(sanitizer2(args.q), verbose=True)
     print ('RESULT:', res)
-
+    '''
     print ('Calculating Accuracy on Entire Data...')
     acc = 0.0
     tot_num = 0
     for question, answer in data:
-        pred = check_true(question, verbose=False)
+        pred = check_true(question, verbose=True)
         tot_num += 1.0
 
         if pred != answer: 
@@ -113,7 +113,7 @@ if __name__ == '__main__':
 
     acc /= tot_num
     print ("Accuracy: ", acc * 100.0)
-
+    '''
 
 
 
