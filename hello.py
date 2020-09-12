@@ -25,7 +25,12 @@ def index():
 def post2():
     print('here')
     text = request.form['query']
-    response = check_true(text)
+    try:
+        response = check_true(text)
+        response = ['False', 'Unsure', 'True'][response * 2]
+    except:
+        response = 'Unsure'
+        
     return render_template('result.html', result=response)
 
 if __name__ == "__main__":
