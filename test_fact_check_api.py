@@ -41,6 +41,18 @@ from test_bert import get_true_false
 
 api_url = 'https://factchecktools.googleapis.com/v1alpha1/claims:search'
 
+def sanitizer1(sentence):
+    sentence = sentence.strip().replace('-19', '')
+    tokenizer = RegexpTokenizer('\w+|\$[\d\.]+||\-+')
+    tokens = tokenizer.tokenize(sentence)
+    sentence = " ".join([token.lower().strip() for token in tokens])
+    sentence = re.sub(r'[ ]+',' ', sentence)
+    sentence = sentence.replace('covid', 'corona virus').\
+                        replace('coronavirus', 'corona virus').\
+                        replace('sars-cov-2', 'corona virus').\
+                        replace('  ', ' ')
+    return sentence
+
 def get_verdicts(question, verbose=True):
     query = {'query': question, 'key': 'AIzaSyCtfHm7PXk1ZD_vcXihKzUk5rNO287S0DY'}
     response = requests.get(api_url, params=query, headers={'Content-Type':'application/json'})
@@ -51,16 +63,17 @@ def get_verdicts(question, verbose=True):
         resp_json = response.json()
         fact, verdict = [], []
         for claim in resp_json['claims']:
-            sentence = claim['text'].strip().replace('-19', '')
-            #remove punctuations
-            tokenizer = RegexpTokenizer('\w+|\$[\d\.]+||\-+')
-            tokens = tokenizer.tokenize(sentence)
-            sentence = " ".join([token.lower().strip() for token in tokens])
-            sentence = re.sub(r'[ ]+',' ', sentence)
-            sentence = sentence.replace('covid', 'corona virus').\
-                                replace('coronavirus', 'corona virus').\
-                                replace('sars-cov-2', 'corona virus').\
-                                replace('  ', ' ')
+            # sentence = claim['text'].strip().replace('-19', '')
+            # #remove punctuations
+            # tokenizer = RegexpTokenizer('\w+|\$[\d\.]+||\-+')
+            # tokens = tokenizer.tokenize(sentence)
+            # sentence = " ".join([token.lower().strip() for token in tokens])
+            # sentence = re.sub(r'[ ]+',' ', sentence)
+            # sentence = sentence.replace('covid', 'corona virus').\
+            #                     replace('coronavirus', 'corona virus').\
+            #                     replace('sars-cov-2', 'corona virus').\
+            #                     replace('  ', ' ')
+            sentence = sanitizer1(claim['text'])
             fact.append(sentence)
             #print(sentence)
             for review in claim['claimReview']:

@@ -3,7 +3,7 @@ import pdb
 import argparse
 from nltk.tokenize import RegexpTokenizer
 import re
-from test_bert import get_scores
+from test_bert import get_scores, sanitizer2
 
 # api_url = 'https://www.googleapis.com/customsearch/v1?&cx=0156ca17ee72cb816&q=is%20covid%20a%20virus'
 api_url = 'https://www.googleapis.com/customsearch/v1'
@@ -23,15 +23,16 @@ def check_true(question, verbose=True):
         resp_json = response.json()
         snippets = []
         for item in resp_json['items']:
-            snippet = item['snippet'].replace('...', '.').replace('-19','').replace(' 19', '')
-            tokenizer = RegexpTokenizer('\w+|\$[\d\.]+||\-+')
-            tokens = tokenizer.tokenize(snippet)
-            sentence = " ".join([token.lower().strip() for token in tokens])
-            # if the 2 and 3rd tokens are numbers, replace the first 3 tokens
-            sentence = re.sub(r'[ ]+',' ', sentence)
-            sentence = re.sub(r'^[a-z]+[ ]+[0-9]{1,2}[ ]+[0-9]{4}[ ]+', '',sentence)
-            sentence = sentence.replace('covid', 'corona virus').replace('coronavirus', 'corona virus').replace('sars-cov-2', 'corona virus').\
-                        replace('  ', ' ')
+            sentence = sanitizer2(item['snippet'])
+            # snippet = item['snippet'].replace('...', '.').replace('-19','').replace(' 19', '')
+            # tokenizer = RegexpTokenizer('\w+|\$[\d\.]+||\-+')
+            # tokens = tokenizer.tokenize(snippet)
+            # sentence = " ".join([token.lower().strip() for token in tokens])
+            # # if the 2 and 3rd tokens are numbers, replace the first 3 tokens
+            # sentence = re.sub(r'[ ]+',' ', sentence)
+            # sentence = re.sub(r'^[a-z]+[ ]+[0-9]{1,2}[ ]+[0-9]{4}[ ]+', '',sentence)
+            # sentence = sentence.replace('covid', 'corona virus').replace('coronavirus', 'corona virus').replace('sars-cov-2', 'corona virus').\
+            #             replace('  ', ' ')
             snippets.append(sentence)
             #print ('\'' + item['snippet'].rstrip('...').lstrip('...') + '\'')
             # print (item['formattedUrl'])
@@ -85,7 +86,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("q", help="enter query", type=str)
     args = parser.parse_args()
-    check_true(args.q)
+    res = check_true(args.q, verbose=False)
+    print (res)
 
     # acc = 0.0
     # tot_num = 0

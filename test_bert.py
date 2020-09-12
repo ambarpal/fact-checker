@@ -3,6 +3,8 @@ import numpy as np
 import pdb
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize
+from nltk.tokenize import RegexpTokenizer
+import re
 
 embedder = SentenceTransformer('distilbert-base-nli-stsb-mean-tokens')
 
@@ -121,7 +123,22 @@ who_truths = \
 'People of all ages can be infected by the COVID-19 virus',
 'Antibiotics CANNOT prevent or treat COVID-19']
 
+def sanitizer2(sentence):
+    sentence = sentence.replace('...', '.').replace('-19','').replace(' 19', '')
+    tokenizer = RegexpTokenizer('\w+|\$[\d\.]+||\-+')
+    tokens = tokenizer.tokenize(sentence)
+    sentence = " ".join([token.lower().strip() for token in tokens])
+    # if the 2 and 3rd tokens are numbers, replace the first 3 tokens
+    sentence = re.sub(r'[ ]+',' ', sentence)
+    sentence = re.sub(r'^[a-z]+[ ]+[0-9]{1,2}[ ]+[0-9]{4}[ ]+', '',sentence)
+    sentence = sentence.replace('covid', 'corona virus').replace('coronavirus', 'corona virus').replace('sars-cov-2', 'corona virus').\
+                replace('  ', ' ')
+    return sentence
+
 def nltk_similarity(sa, sb):
+    sa = sanitizer2(sa)
+    sb = sanitizer2(sb)
+
     # tokenization 
     X_list = word_tokenize(sa)  
     Y_list = word_tokenize(sb) 
@@ -141,12 +158,14 @@ def nltk_similarity(sa, sb):
         else: l1.append(0) 
         if w in Y_set: l2.append(1) 
         else: l2.append(0) 
-    c = 0
-      
+    c = 0.0
+    
     # cosine formula  
     for i in range(len(rvector)): 
-            c+= l1[i]*l2[i] 
+            c+= l1[i]*l2[i]
     cosine = c / float((sum(l1)*sum(l2))**0.5) 
+
+    # pdb.set_trace()
     return cosine
 
 
@@ -154,11 +173,12 @@ def intersecting_who(question, verbose=True):
     who_embeddings = embedder.encode(who_truths, convert_to_tensor=True)
     question_embedding = embedder.encode(question, convert_to_tensor=True)
     cos_scores = util.pytorch_cos_sim(question_embedding, who_embeddings)[0]
-    cos_scores = cos_scores.cpu().numpy().squeeze()
+    cos_scores = cos_scores.cpu()
+    cos_scores_nltk = [nltk_similarity(question, who_truths[ind]) for ind in range(len(who_truths))]
 
     if verbose:
-        for ind in range(cos_scores.shape[0]):
-            print (who_truths[ind], cos_scores[ind])
+        for ind in range(cos_scores.numpy().squeeze().shape[0]):
+            print ('({},{}): \t\t{}'.format(cos_scores[ind], cos_scores_nltk[ind], who_truths[ind]))
 
     res = False
     mx_ind = np.argmax(cos_scores)
@@ -173,8 +193,8 @@ def intersecting_who(question, verbose=True):
         return (False, -1) 
 
 def get_scores(corpus, question, verbose=True):
-    pdb.set_trace()
     res, who_fact = intersecting_who(question, verbose=verbose)
+    # pdb.set_trace()
     if res:
         print ('WHO FACT IS A MATCH')
         print (who_fact)
