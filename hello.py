@@ -35,10 +35,3 @@ def post2():
 def index():
     print ('i am called')
     return render_template('index.html')
-
-@app.route('/handle_data', methods=['POST'])
-def handle_data():
-    projectpath = request.form['projectFilepath']
-    # your code
-    # return a response
-    return render_template('result.html', result=projectpath)
