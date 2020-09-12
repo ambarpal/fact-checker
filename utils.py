@@ -287,10 +287,12 @@ def no_negation(query):
 
     negation_tokens = [tok for tok in doc if tok.dep_ == 'neg']
     negation_head_tokens = [token.head for token in negation_tokens]
-    if len(negation_tokens)>0:
-        return -1
-    else:
-        return 1
+    return 1
+    
+    # if len(negation_tokens)>0:
+    #     return -1
+    # else:
+    #     return 1
     
     
     #for token in negation_head_tokens:
