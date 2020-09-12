@@ -3,10 +3,16 @@ import pdb
 import torch
 import sys
 
-# sys.path.insert(0, './cis/home/ambar/my_documents/docker-data/com/hophacks20')
-from test_search_engine import check_true
+
+import os
+print(os.getcwd())
+
+#ishita's laptop does not support bert
+if os.getcwd() != 'C:\Users\sakur\Desktop\Hophacks\website\fact-checker':
+    from test_search_engine import check_true
 
 app = Flask(__name__)
+
 
 # @app.route('/')
 # def index():
