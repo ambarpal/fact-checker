@@ -99,9 +99,7 @@ if __name__ == '__main__':
 
 
 
-
-
-
+## API: https://developers.google.com/fact-check/tools/api/reference/rest/v1alpha1/claims#Claim
 
 
 
