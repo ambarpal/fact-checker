@@ -37,7 +37,7 @@ import pdb
 import argparse
 import re
 from nltk.tokenize import RegexpTokenizer
-from test_bert import get_true_false
+from utils import get_true_false
 
 api_url = 'https://factchecktools.googleapis.com/v1alpha1/claims:search'
 

@@ -3,7 +3,7 @@ import pdb
 import argparse
 from nltk.tokenize import RegexpTokenizer
 import re
-from test_bert import get_scores, sanitizer2
+from utils import get_scores, sanitizer2
 
 # api_url = 'https://www.googleapis.com/customsearch/v1?&cx=0156ca17ee72cb816&q=is%20covid%20a%20virus'
 api_url = 'https://www.googleapis.com/customsearch/v1'
@@ -87,7 +87,7 @@ data = [
     ("Mosquito bites spread the coronavirus", False),
     ("The coronavirus spreads in hot or cold climates", True),
     ("I can recover from the coronavirus", True),
-    ("Children do not spread the corona virus", False)
+    ("Children do not spread the corona virus", False),
     ("Drinking cow urine prevents corona virus", False)
 ]
 
@@ -95,14 +95,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("q", help="enter query", type=str)
     args = parser.parse_args()
-    res = check_true(sanitizer2(args.q), verbose=False)
+    res = check_true(sanitizer2(args.q), verbose=True)
     print ('RESULT:', res)
-
+    '''
     print ('Calculating Accuracy on Entire Data...')
     acc = 0.0
     tot_num = 0
     for question, answer in data:
-        pred = check_true(question, verbose=False)
+        pred = check_true(question, verbose=True)
         tot_num += 1.0
 
         if pred != answer: 
@@ -113,7 +113,7 @@ if __name__ == '__main__':
 
     acc /= tot_num
     print ("Accuracy: ", acc * 100.0)
-
+    '''
 
 
 
