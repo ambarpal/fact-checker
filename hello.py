@@ -8,7 +8,7 @@ import os
 print(os.getcwd())
 
 #ishita's laptop does not support bert
-if os.getcwd() != 'C:\Users\sakur\Desktop\Hophacks\website\fact-checker':
+if os.getcwd() != 'C:\\Users\\sakur\\Desktop\\Hophacks\\website\\fact-checker':
     from test_search_engine import check_true
 
 app = Flask(__name__)
