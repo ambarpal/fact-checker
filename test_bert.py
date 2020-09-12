@@ -1,5 +1,8 @@
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
+import pdb
+from nltk.corpus import stopwords 
+from nltk.tokenize import word_tokenize
 
 embedder = SentenceTransformer('distilbert-base-nli-stsb-mean-tokens')
 
@@ -14,7 +17,6 @@ embedder = SentenceTransformer('distilbert-base-nli-stsb-mean-tokens')
 #           'A monkey is playing drums.',
 #           'A cheetah is running behind its prey.'
 #           ]
-
 
 # corpus = [
 # 'Corona virus disease corona virus is an infectious disease caused by a newly discovered corona virus. Most people infected with the corona virus will',
@@ -60,19 +62,19 @@ embedder = SentenceTransformer('distilbert-base-nli-stsb-mean-tokens')
 # ]
 # queries = ['would pneumonia vaccine protect me from corona virus']
 
-# corpus = [
-# 'Highlighting some of the misinformation circulating on COVID-19. Bleach and disinfectant should be used carefully to disinfect surfaces only. Drinking methanol, ethanol or bleach DOES NOT prevent or cure COVID-19 and can be ', 
-# 'Keep alcohol-based hand sanitizers out of childrens reach. Apply a coin-sized amount on your hands. Avoid touching your eyes, mouth and '
-# 'Regularly wash hands with soap and water or alcohol-based hand sanitizer Fact: There is no scientific evidence that lemon/turmeric prevents COVID-19',
-# 'Todays handrubs all contain skin softeners which help prevent drying. Of the published studies available, many describe that nurses who routinely use alcohol',
-# 'for preventing and for protecting human health during all infectious disease outbreaks, including of coronavirus disease 2019 (COVID-19)',
-# 'Consequently, hand hygiene is extremely important to prevent the spread of the COVID-19 virus. It also interrupts transmission of other viruses and bacteria ',
-# 'Q&A: Considerations for the cleaning and disinfection of environmental surfaces in the context of COVID-19 in non-health care settings ',
-# 'How can you clean soiled bedding, towels and linens from patients with COVID-19?',
-# 'Simple ways to prevent the spread of COVID-19 in your workplace. 2. How to Put sanitizing hand rub dispensers in prominent places around the workplace. Encourage regular hand-washing or use of an alcohol rub by all ',
-# 'Alternative drinking-water disinfectants: bromine, iodine and silver. used; these are generally used to prevent the silver nanoparticles from aggregating or '
-# ]
-# query = 'drinking sanitizers prevent corona virus'
+corpus = [
+'Highlighting some of the misinformation circulating on COVID-19. Bleach and disinfectant should be used carefully to disinfect surfaces only. Drinking methanol, ethanol or bleach DOES NOT prevent or cure COVID-19 and can be ', 
+'Keep alcohol-based hand sanitizers out of childrens reach. Apply a coin-sized amount on your hands. Avoid touching your eyes, mouth and '
+'Regularly wash hands with soap and water or alcohol-based hand sanitizer Fact: There is no scientific evidence that lemon/turmeric prevents COVID-19',
+'Todays handrubs all contain skin softeners which help prevent drying. Of the published studies available, many describe that nurses who routinely use alcohol',
+'for preventing and for protecting human health during all infectious disease outbreaks, including of coronavirus disease 2019 (COVID-19)',
+'Consequently, hand hygiene is extremely important to prevent the spread of the COVID-19 virus. It also interrupts transmission of other viruses and bacteria ',
+'Q&A: Considerations for the cleaning and disinfection of environmental surfaces in the context of COVID-19 in non-health care settings ',
+'How can you clean soiled bedding, towels and linens from patients with COVID-19?',
+'Simple ways to prevent the spread of COVID-19 in your workplace. 2. How to Put sanitizing hand rub dispensers in prominent places around the workplace. Encourage regular hand-washing or use of an alcohol rub by all ',
+'Alternative drinking-water disinfectants: bromine, iodine and silver. used; these are generally used to prevent the silver nanoparticles from aggregating or '
+]
+question = 'drinking sanitizers prevents COVID-19'
 
 # corpus = [
 # 'People should NOT wear masks when exercising, as masks may reduce the ability The important preventive measure during exercise is to maintain physical',
@@ -88,25 +90,144 @@ embedder = SentenceTransformer('distilbert-base-nli-stsb-mean-tokens')
 # ]
 # queries = ['i should not wear masks while exercising']
 
-def get_scores(corpus, query):
-  corpus_embeddings = embedder.encode(corpus, convert_to_tensor=True)
+who_truths = \
+['Studies show hydroxychloroquine does not have clinical benefits in treating COVID-19',
+'People should NOT wear masks while exercising',
+'The likelihood of shoes spreading COVID-19 is very low',
+'The coronavirus disease (COVID-19) is caused by a virus', 
+'COVID-19 is NOT caused by bacteria',
+'The prolonged use of medical masks* when properly worn DOES NOT cause CO2 intoxication nor oxygen deficiency',
+'Most people who get COVID-19 recover from it',
+'Drinking alcohol does not protect you against COVID-19 and can be dangerous',
+'Thermal scanners CANNOT detect COVID-19',
+'There are currently no drugs licensed for the treatment or prevention of COVID-19',
+'Adding pepper to your soup or other meals DOES NOT prevent or cure COVID-19',
+'COVID-19 is NOT transmitted through houseflies',
+'Spraying and introducing bleach or another disinfectant into your body WILL NOT protect you against COVID-19;and can be dangerous',
+'Drinking methanol ethanol or bleach DOES NOT prevent or cure COVID-19 and can be extremely dangerous',
+'Drinking sanitizers DOES NOT prevent or cure COVID-19 and can be extremely dangerous',
+'5G mobile networks DO NOT spread COVID-19',
+'Exposing yourself to the sun or temperatures higher than 25&deg;C DOES NOT protect you from COVID-19',
+'Catching COVID-19 DOES NOT mean you will have it for life',
+'Being able to hold your breath for 10 seconds or more without coughing or feeling discomfort DOES NOT mean you are free from COVID-19',
+'The COVID-19 virus can spread in hot and humid climates',
+'Cold weather and snow CANNOT kill the COVID-19 virus',
+'Taking a hot bath does not prevent COVID-19',
+'Hand dryers are NOT effective in killing the COVID-19 virus',
+'Ultra-violet (UV) lamps should NOT be used to disinfect hands or other areas of your skin',
+'Vaccines against pneumonia DO NOT protect against the COVID-19 virus',
+'Rinsing your nose with saline does NOT prevent COVID-19 ',
+'Eating garlic does NOT prevent COVID-19',
+'People of all ages can be infected by the COVID-19 virus',
+'Antibiotics CANNOT prevent or treat COVID-19']
 
-  # Find the closest 5 sentences of the corpus for each query sentence based on cosine similarity
-  top_k = 5
+def nltk_similarity(sa, sb):
+    # tokenization 
+    X_list = word_tokenize(sa)  
+    Y_list = word_tokenize(sb) 
+      
+    # sw contains the list of stopwords 
+    sw = stopwords.words('english')  
+    l1 =[];l2 =[] 
+      
+    # remove stop words from the string 
+    X_set = {w for w in X_list if not w in sw}  
+    Y_set = {w for w in Y_list if not w in sw} 
+      
+    # form a set containing keywords of both strings  
+    rvector = X_set.union(Y_set)  
+    for w in rvector: 
+        if w in X_set: l1.append(1) # create a vector 
+        else: l1.append(0) 
+        if w in Y_set: l2.append(1) 
+        else: l2.append(0) 
+    c = 0
+      
+    # cosine formula  
+    for i in range(len(rvector)): 
+            c+= l1[i]*l2[i] 
+    cosine = c / float((sum(l1)*sum(l2))**0.5) 
+    return cosine
 
-  query_embedding = embedder.encode(query, convert_to_tensor=True)
-  cos_scores = util.pytorch_cos_sim(query_embedding, corpus_embeddings)[0]
-  cos_scores = cos_scores.cpu()
 
-  #We use np.argpartition, to only partially sort the top_k results
-  top_results = np.argpartition(-cos_scores, range(top_k))[0:top_k]
+def intersecting_who(question, verbose=True):
+    who_embeddings = embedder.encode(who_truths, convert_to_tensor=True)
+    question_embedding = embedder.encode(question, convert_to_tensor=True)
+    cos_scores = util.pytorch_cos_sim(question_embedding, who_embeddings)[0]
+    cos_scores = cos_scores.cpu().numpy().squeeze()
 
-  print("\n\n======================\n\n")
-  print("Query:", query)
-  print("\nTop 5 most similar sentences in corpus:")
+    if verbose:
+        for ind in range(cos_scores.shape[0]):
+            print (who_truths[ind], cos_scores[ind])
 
-  for idx in top_results[0:top_k]:
-      print(corpus[idx].strip(), "(Score: %.4f)" % (cos_scores[idx]))
+    res = False
+    mx_ind = np.argmax(cos_scores)
+    if cos_scores[mx_ind] >= 0.8:
+        if verbose:
+            print (who_truths[mx_ind], question)
+        res = True
 
-if __name__ == 'main':
-  get_scores(corpus, query)
+    if res: 
+        return (True, who_truths[mx_ind])
+    else:
+        return (False, -1) 
+
+def get_scores(corpus, question, verbose=True):
+    pdb.set_trace()
+    res, who_fact = intersecting_who(question, verbose=verbose)
+    if res:
+        print ('WHO FACT IS A MATCH')
+        print (who_fact)
+        return [[who_fact, 1.0]]
+
+    corpus_embeddings = embedder.encode(corpus, convert_to_tensor=True)
+
+    # Find the closest 5 sentences of the corpus for each question sentence based on cosine similarity
+    top_k = 5
+
+    question_embedding = embedder.encode(question, convert_to_tensor=True)
+    cos_scores = util.pytorch_cos_sim(question_embedding, corpus_embeddings)[0]
+    cos_scores = cos_scores.cpu()
+
+    # temp = util.pytorch_cos_sim(embedder.encode('fact: drinking sanitiers does not prevent or cure corona virus'), embedder.encode('drinking sanitizers prevents corona virus'))
+    # pdb.set_trace()
+    #We use np.argpartition, to only partially sort the top_k results
+    top_results = np.argpartition(-cos_scores, range(top_k))[0:top_k]
+
+    if verbose:
+        print("\n\n======================\n\n")
+        print("question:", question)
+        print("\nTop 5 most similar sentences in corpus:")
+
+    res = []
+    for idx in top_results[0:top_k]:
+        cur_res = [corpus[idx].strip(), cos_scores[idx]]
+        res.append(cur_res)
+        if verbose:
+            print(cur_res[0], "(Score: %.4f)" % (cur_res[1]))
+
+    return res
+
+def get_true_false(corpus, verbose=True):
+    corpus_embeddings = embedder.encode(corpus, convert_to_tensor=True)
+    query_embedding = embedder.encode('true', convert_to_tensor=True)
+    true_cos_scores = util.pytorch_cos_sim(query_embedding, corpus_embeddings)[0]
+    true_cos_scores = true_cos_scores.cpu()
+    query_embedding = embedder.encode('false', convert_to_tensor=True)
+    false_cos_scores = util.pytorch_cos_sim(query_embedding, corpus_embeddings)[0]
+    false_cos_scores = false_cos_scores.cpu()
+    res = []
+    for i in range(len(corpus)):
+        if true_cos_scores[i] > false_cos_scores[i]:
+            res.append('True')
+        else:
+            res.append('False')
+
+        if verbose:
+            print(i,':',corpus[i],'\n\t',res[-1])
+            print('true: ', true_cos_scores[i], 'false: ', false_cos_scores[i], '\n\n')
+
+    return res
+
+if __name__ == '__main__':
+    res = get_scores(corpus, question)
