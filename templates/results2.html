@@ -20,9 +20,9 @@
       <form action="{{url_for('index')}}">
         <div class="inner-form">
           <div class="text-field first-wrap" style='position:fixed; top:20%; left:10%; background:transparent'>
-            <p style="font-size:30px"><b>[Question here]</b></p>
+            <p style="font-size:30px"><b>{{ result['question']}}</b></p>
             <br>
-                <p style="font-size:20px">{{ result }}</p>
+                <p style="font-size:20px">{{ result['verdict'] }}</p>
              <div class="text second-wrap">
                <br><br><br>
                <input type="submit" class='btn-search' value='Search again!'>
