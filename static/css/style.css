@@ -931,12 +931,10 @@ button {
   display: -ms-flexbox;
   /*display: flex;*/
   -ms-flex-align: center;
-      align-items: center;
-  /*background: #d9f1e3;*/
-  background: #ffffff;
+  align-items: center;
   position: fixed;
     top: 30%;
-    left: 50%;
+    left: 20%;
 }
 
 .s130 form .inner-form .text-field.first-wrap input {
