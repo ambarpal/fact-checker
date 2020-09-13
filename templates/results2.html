@@ -2,9 +2,8 @@
 <html lang="en">
 <style>
   body {
-    background-image: url("https://p0.pikist.com/photos/188/311/dog-white-happy-winter-background-breed-cute-mammal-pet.jpg");
-    background-size: 50%;
-    background-position-y: 150px;
+    background-image: url("https://img.olyhouse.com/img/lifestyle/13-cool-things-you-might-not-know-about-golden-retrievers-13.jpg");
+    background-size: cover;
     background-repeat: no-repeat;
   }
 </style>
@@ -12,20 +11,20 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="author" content="colorlib.com">
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}?<?php echo date('l jS \of F Y h:i:s A'); ?>">
     <title>Check Facts!</title>
 </head>
   <body>
     <div class="s130">
       <form action="{{url_for('index')}}">
         <div class="inner-form">
-          <div class="text-field first-wrap" style='position:fixed; top:20%; left:50%'>
-            <b>[Question here]</b>
-            <br><br>{{ result }}
+          <div class="text-field first-wrap" style='position:fixed; top:20%; left:10%; background:transparent'>
+            <p style="font-size:30px"><b>[Question here]</b></p>
+            <br>
+                <p style="font-size:20px">{{ result }}</p>
              <div class="text second-wrap">
-               <br><br><br><br>
+               <br><br><br>
                <input type="submit" class='btn-search' value='Search again!'>
              </div>
            </div>
