@@ -845,6 +845,20 @@ button {
   margin-bottom: 30px;
 }
 
+.s130 form .inner-result {
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
+  -ms-flex-align: center;
+      align-items: center;
+  box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
+  border-radius: 34px;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
 .s130 form .inner-form .input-field {
   height: 68px;
 }
@@ -910,6 +924,35 @@ button {
   height: 36px;
   fill: #222;
 }
+
+.s130 form .inner-form .text-field.first-wrap {
+  -ms-flex-positive: 1;
+      flex-grow: 1;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+      align-items: center;
+  background: #d9f1e3;
+  position: fixed;
+    top: 30%;
+    left: 50%;
+}
+
+.s130 form .inner-form .text-field.first-wrap input {
+  -ms-flex-positive: 1;
+      flex-grow: 1;
+}
+
+.s130 form .inner-form .text-field.first-wrap .svg-wrapper {
+  min-width: 80px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
+}
+
 
 .s130 form .inner-form .input-field.second-wrap {
   min-width: 216px;
