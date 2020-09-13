@@ -929,10 +929,11 @@ button {
   -ms-flex-positive: 1;
       flex-grow: 1;
   display: -ms-flexbox;
-  display: flex;
+  /*display: flex;*/
   -ms-flex-align: center;
       align-items: center;
-  background: #d9f1e3;
+  /*background: #d9f1e3;*/
+  background: #ffffff;
   position: fixed;
     top: 30%;
     left: 50%;
