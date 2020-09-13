@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+  body {
+    background-image: url("https://p0.pikist.com/photos/188/311/dog-white-happy-winter-background-breed-cute-mammal-pet.jpg");
+    background-size: 50%;
+    background-position-y: 150px;
+    background-repeat: no-repeat;
+  }
+</style>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="colorlib.com">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+    <title>Check Facts!</title>
+</head>
+  <body>
+    <div class="s130">
+      <form action="{{url_for('index')}}">
+        <div class="inner-form">
+          <div class="text-field first-wrap" style='position:fixed; top:20%; left:50%'>
+            <b>[Question here]</b>
+            <br><br>{{ result }}
+             <div class="text second-wrap">
+               <br><br><br><br>
+               <input type="submit" class='btn-search' value='Search again!'>
+             </div>
+           </div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
