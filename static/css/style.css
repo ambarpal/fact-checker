@@ -874,21 +874,21 @@ button {
   color: #000;
 }
 
-.s130 form .inner-form .input-field input.placeholder {
-  color: #222;
+/*.s130 form .inner-form .input-field input.placeholder {
+  color: #FFF;
   font-size: 16px;
 }
 
 .s130 form .inner-form .input-field input:-moz-placeholder {
-  color: #222;
+  color: #F00;
   font-size: 16px;
 }
 
 .s130 form .inner-form .input-field input::-webkit-input-placeholder {
-  color: #222;
+  color: #00F;
   font-size: 16px;
 }
-
+*/
 .s130 form .inner-form .input-field input:hover, .s130 form .inner-form .input-field input:focus {
   box-shadow: none;
   outline: 0;
@@ -975,6 +975,7 @@ button {
 
 .s130 form .inner-form .input-field.second-wrap .btn-search:hover {
   background: #009451;
+  /*background: #FFF;*/
 }
 
 .s130 form .inner-form .input-field.second-wrap .btn-search:focus {
