@@ -8,7 +8,7 @@ import os
 if os.getcwd() != 'C:\\Users\\sakur\\Desktop\\Hophacks\\website\\fact-checker':
     print(os.getcwd())
     sys.path.insert(0, './cis/home/ambar/my_documents/docker-data/com/hophacks20')
-    from test_search_engine import check_true
+    from test_search_engine import check_true, sanitizer2
 
 app = Flask(__name__)
 
@@ -24,11 +24,10 @@ def index():
 
 @app.route('/', methods=['POST'])
 def post2():
-    print('here')
     text = request.form['query']
     try:
-        #response = check_true(text)
-        response = 0
+        response = check_true(sanitizer2(text))
+        # print ('HAHAHAHAHA', response)
         response = ['False', 'Unsure', 'True'][response * 2]
     except:
         response = 'Unsure'
