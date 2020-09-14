@@ -5,15 +5,18 @@ from nltk.tokenize import RegexpTokenizer
 import re
 from utils import get_scores, sanitizer2
 
-# api_url = 'https://www.googleapis.com/customsearch/v1?&cx=0156ca17ee72cb816&q=is%20covid%20a%20virus'
+# api_url = 'https://www.googleapis.com/customsearch/v1?&cx=yyyyy&q=is%20covid%20a%20virus'
+
 api_url = 'https://www.googleapis.com/customsearch/v1'
+#generate API key and custom search engine identifier to use this API
+
 threshold_high = 0.78
 threshold_low = 0.78
 
 def check_true(question, verbose=True):
     query = {
-        'key': 'AIzaSyCtfHm7PXk1ZD_vcXihKzUk5rNO287S0DY', 
-        'cx': '0156ca17ee72cb816', 
+        'key': 'xxxxx',
+        'cx': 'yyyyy',
         'q': question
     }
     response = requests.get(api_url, params=query, headers={'Content-Type':'application/json'})
@@ -34,7 +37,7 @@ def check_true(question, verbose=True):
             print('\n'.join(snippets))
 
         res_scores = get_scores(snippets, question, verbose=verbose)
-        
+
         if verbose:
             print ('RES SCORES')
             print (res_scores)
@@ -54,25 +57,25 @@ def check_true(question, verbose=True):
     return res
 
 data = [
-    ("corona virus is not a hoax", True), 
-    ("corona virus is a hoax", False), 
+    ("corona virus is not a hoax", True),
+    ("corona virus is a hoax", False),
     ("corona virus is not a conspiracy theory", True),
     ("corona virus is a conspiracy theory", False),
-    ("corona virus was made in a lab", False), 
+    ("corona virus was made in a lab", False),
     ("corona virus was man made", False),
-    ("corona virus is a bio weapon", False), 
-    ("corona virus causes cancer", False), 
-    ("corona virus causes hiv", False), 
-    ("injecting bleach kills does not kill corona virus", True), 
-    ("there is a hidden cure for corona virus", False), 
+    ("corona virus is a bio weapon", False),
+    ("corona virus causes cancer", False),
+    ("corona virus causes hiv", False),
+    ("injecting bleach kills does not kill corona virus", True),
+    ("there is a hidden cure for corona virus", False),
     ("corona virus is the deadliest virus", False),
-    ("corona virus emerged in wuhan", True), 
+    ("corona virus emerged in wuhan", True),
     ("corona virus originated in wuhan", True),
-    ("corona virus is a virus", True), 
-    ("there is no vaccine for coronavirus", True), 
-    ("pneumonia vaccine would protect me from corona virus", False), 
+    ("corona virus is a virus", True),
+    ("there is no vaccine for coronavirus", True),
+    ("pneumonia vaccine would protect me from corona virus", False),
     ("drinking sanitizers prevents corona virus", False),
-    ("i should not wear masks while exercising", True), 
+    ("i should not wear masks while exercising", True),
     ("there a cure for the coronavirus", False),
     ("the pneumonia vaccine will immunise me against the coronavirus", False),
     ("Mosquito bites spread the coronavirus", False),
@@ -123,21 +126,21 @@ data_cdc = [
 ]
 
 data_nasem = [
-    ('Applying heat to your skin or throat does not kill the coronavirus', True), 
-    ('There are no food, drinks, or supplements that will protect you from COVID-19', True), 
-    ('COVID-19  is not like the flu', True), 
-    ('The virus lives on printing paper and tissue paper for 3 hours', True), 
-    ('The virus lives on copper for 4 hours, cloth for 2 day, wood for 2 days, paper money for 4 days, and glass for 4 days', True), 
-    ('The virus lives on plastic for 3 to 7 days', True), 
-    ('The stainless steel lives on plastic for 2 to 7 days', True), 
-    ('A small amount of viable plastics stay on surgical masks after 7 days', True), 
-    ('Washing your hands with soap and water for 20 secs is effective in protecting against the coronavirus', True), 
-    ('Copper supplement will not prevent, fight or cure a COVID infection', True), 
-    ('Lemon juice will not prevent or cure a COVID-19 infection, no matter what is mixed with it', True), 
-    ('The flu vaccine does not cause you to test positive for the COVID-19 test', True), 
-    ('The flu vaccine does not interfere with your ability to fight the coronavirus', True), 
-    ('Consuming ginger will not prevent or cure COVID-19', True), 
-    # ('There is no evidence that witch hazel destroys germs, including the novel coronavirus', True), 
+    ('Applying heat to your skin or throat does not kill the coronavirus', True),
+    ('There are no food, drinks, or supplements that will protect you from COVID-19', True),
+    ('COVID-19  is not like the flu', True),
+    ('The virus lives on printing paper and tissue paper for 3 hours', True),
+    ('The virus lives on copper for 4 hours, cloth for 2 day, wood for 2 days, paper money for 4 days, and glass for 4 days', True),
+    ('The virus lives on plastic for 3 to 7 days', True),
+    ('The stainless steel lives on plastic for 2 to 7 days', True),
+    ('A small amount of viable plastics stay on surgical masks after 7 days', True),
+    ('Washing your hands with soap and water for 20 secs is effective in protecting against the coronavirus', True),
+    ('Copper supplement will not prevent, fight or cure a COVID infection', True),
+    ('Lemon juice will not prevent or cure a COVID-19 infection, no matter what is mixed with it', True),
+    ('The flu vaccine does not cause you to test positive for the COVID-19 test', True),
+    ('The flu vaccine does not interfere with your ability to fight the coronavirus', True),
+    ('Consuming ginger will not prevent or cure COVID-19', True),
+    # ('There is no evidence that witch hazel destroys germs, including the novel coronavirus', True),
     ('You should wear sunblock', True)
 ]
 
@@ -155,7 +158,7 @@ if __name__ == '__main__':
         pred = check_true(question, verbose=False)
         tot_num += 1.0
 
-        if pred != answer: 
+        if pred != answer:
             print (question, "Incorrect")
         else:
             acc += 1.0
@@ -163,8 +166,3 @@ if __name__ == '__main__':
 
     acc /= tot_num
     print ("Accuracy: ", acc * 100.0)
-
-
-
-
-

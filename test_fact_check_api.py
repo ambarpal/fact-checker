@@ -2,7 +2,7 @@
 # import pdb
 
 # api_url = 'https://factchecktools.googleapis.com/v1alpha1/claims:search'
-# query = {'query': 'coronavirus is a type of rabies', 'key': 'AIzaSyCtfHm7PXk1ZD_vcXihKzUk5rNO287S0DY'}
+# query = {'query': 'coronavirus is a type of rabies', 'key': 'xxxxx'}
 # response = requests.get(api_url, params=query, headers={'Content-Type':'application/json'})
 # if response.status_code != 200:
 #     # This means something went wrong.
@@ -15,20 +15,20 @@
 #         # print('{} {}'.format(todo_item['id'], todo_item['summary']))
 
 # '''
-# GET https://factchecktools.googleapis.com/v1alpha1/claims:search?query=is%20google%20real&key=AIzaSyCtfHm7PXk1ZD_vcXihKzUk5rNO287S0DY HTTP/1.1
+# GET https://factchecktools.googleapis.com/v1alpha1/claims:search?query=is%20google%20real&key=xxxxx HTTP/1.1
 
 # Accept: application/json
 
 
 # curl \
-#   'https://factchecktools.googleapis.com/v1alpha1/claims:search?query=is%20google%20real&key=955767f0032cf20f122a012549e42d11eb4f398c' \
+#   'https://factchecktools.googleapis.com/v1alpha1/claims:search?query=is%20google%20real&key=xxxxx' \
 #   --header 'Accept: application/json' \
 #   --compressed
 
-# {'text': 'Novel coronavirus is a virus, not a bacterium easily treated with aspirin', 
+# {'text': 'Novel coronavirus is a virus, not a bacterium easily treated with aspirin',
 # 'claimant': 'Facebook',
 # 'claimDate': '2020-05-28T00:00:00Z',
-# 'claimReview': 
+# 'claimReview':
 # [{'publisher': {'name': 'USA Today', 'site': 'usatoday.com'}, 'url': 'https://www.usatoday.com/story/news/factcheck/2020/05/29/fact-check-covid-19-caused-virus-not-bacteria/5277398002/', 'title': 'Fact check: COVID-19 is caused by a virus, not by bacteria', 'reviewDate': '2020-05-29T00:00:00Z', 'textualRating': 'False', 'languageCode': 'en'}]}
 # '''
 
@@ -40,6 +40,7 @@ from nltk.tokenize import RegexpTokenizer
 from utils import get_true_false
 
 api_url = 'https://factchecktools.googleapis.com/v1alpha1/claims:search'
+# generate an API key to use this API
 
 def sanitizer1(sentence):
     sentence = sentence.strip().replace('-19', '')
@@ -54,7 +55,7 @@ def sanitizer1(sentence):
     return sentence
 
 def get_verdicts(question, verbose=True):
-    query = {'query': question, 'key': 'AIzaSyCtfHm7PXk1ZD_vcXihKzUk5rNO287S0DY'}
+    query = {'query': question, 'key': 'xxxxx'}
     response = requests.get(api_url, params=query, headers={'Content-Type':'application/json'})
     if response.status_code != 200:
         # This means something went wrong.
@@ -90,21 +91,3 @@ if __name__ == '__main__':
 
 
 ## API: https://developers.google.com/fact-check/tools/api/reference/rest/v1alpha1/claims#Claim
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
