@@ -83,7 +83,7 @@ if __name__ == '__main__':
     parser.add_argument("q", help="enter query", type=str)
     args = parser.parse_args()
 
-    res_verdicts = get_verdicts(args.q, verbose=False)
+    res_verdicts = get_verdicts(args.q, verbose=True)
     for v in res_verdicts:
         print (v[1])
 
